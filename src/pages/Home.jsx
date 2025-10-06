@@ -4,8 +4,7 @@ import { MoveRight } from "lucide-react";
 import useProducts from "../hooks/useProducts";
 
 const Home = () => {
-  const {products, loading, error} = useProducts();
-  
+  const { products, loading, error } = useProducts();
   const featuredProducts = products.slice(0, 6);
   return (
     <div>
