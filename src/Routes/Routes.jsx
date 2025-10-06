@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Products from "../pages/Products";
 import MainLayout from "../layouts/MainLayout";
 import ErrorPage from "../pages/ErrorPage";
+import Wishlist from "../pages/Wishlist";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: "/products",
         Component: Products,
+      },
+      {
+        path: "/wishlist",
+        Component: Wishlist,
       },
     ],
   },
