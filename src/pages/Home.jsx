@@ -29,9 +29,7 @@ const Home = () => {
         </div>
       )}
 
-      {
-        error && <p>error</p>
-      }
+      {error && <p>error</p>}
     </div>
   );
 };
