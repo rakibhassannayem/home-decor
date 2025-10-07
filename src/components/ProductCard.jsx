@@ -3,7 +3,7 @@ import { Link } from "react-router";
 const ProductCard = ({ product }) => {
   const { name, category, image, price, id } = product;
   return (
-    <div className="card bg-base-100 border shadow-sm hover:scale-105 transition ease-in-out">
+    <div className="card bg-base-100 border shadow-sm lg:hover:scale-105 transition ease-in-out">
       <figure className="h-50 overflow-hidden">
         <img className="w-full object-cover" src={image} alt="" />
       </figure>
