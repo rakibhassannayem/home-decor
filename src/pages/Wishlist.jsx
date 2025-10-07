@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -9,16 +9,15 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { loadWishlist, removeFromWishlist } from "../utils/localStorage";
 
 const Wishlist = () => {
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(() => loadWishlist());
   const [sortOrder, setSortOrder] = useState("none");
-  useEffect(() => {
-    const savedList = JSON.parse(localStorage.getItem("wishlist"));
-    if (savedList) {
-      setWishlist(savedList);
-    }
-  }, []);
+
+  if (!wishlist.length) {
+    return <p>No Data Available</p>;
+  }
 
   const sortedItem = () => {
     if (sortOrder === "price-asc") {
@@ -31,11 +30,11 @@ const Wishlist = () => {
   };
 
   const handleRemove = (id) => {
-    const existingList = JSON.parse(localStorage.getItem("wishlist"));
+    // remove from localStorage
+    removeFromWishlist(id);
 
-    let updatedList = existingList.filter((p) => p.id !== id);
-    setWishlist(updatedList);
-    localStorage.setItem("wishlist", JSON.stringify(updatedList));
+    // UI update
+    setWishlist((prev) => prev.filter((p) => p.id === id));
   };
 
   const totalsByCategory = {};
