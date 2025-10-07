@@ -1,4 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -12,9 +22,9 @@ const Wishlist = () => {
 
   const sortedItem = () => {
     if (sortOrder === "price-asc") {
-      return [...wishlist.sort((a, b) => a.price - b.price)];
+      return [...wishlist].sort((a, b) => a.price - b.price);
     } else if (sortOrder === "price-dsc") {
-      return [...wishlist.sort((a, b) => b.price - a.price)];
+      return [...wishlist].sort((a, b) => b.price - a.price);
     } else {
       return wishlist;
     }
@@ -27,6 +37,18 @@ const Wishlist = () => {
     setWishlist(updatedList);
     localStorage.setItem("wishlist", JSON.stringify(updatedList));
   };
+
+  const totalsByCategory = {};
+  wishlist.forEach((product) => {
+    const category = product.category;
+    totalsByCategory[category] =
+      (totalsByCategory[category] || 0) + product.price;
+  });
+  const chartData = Object.keys(totalsByCategory).map((category) => ({
+    category,
+    totalPrice: totalsByCategory[category],
+  }));
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -43,14 +65,13 @@ const Wishlist = () => {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="none" selected>
-              Sort by Price
-            </option>
+            <option value="none">Sort by Price</option>
             <option value="price-asc">Low to High</option>
             <option value="price-dsc">High to Low</option>
           </select>
         </label>
       </div>
+
       <div className="space-y-3">
         {sortedItem().map((p) => (
           <div key={p.id} className="card card-side bg-base-100 shadow border">
@@ -76,6 +97,23 @@ const Wishlist = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* chart */}
+      <div className="my-5">
+        <h1 className="text-2xl font-bold">Wishlist Summary</h1>
+        <div className="bg-base-100 border rounded-xl p-4 my-4 h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="category" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="totalPrice" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
