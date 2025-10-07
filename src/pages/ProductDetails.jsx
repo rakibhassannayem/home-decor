@@ -14,7 +14,7 @@ const ProductDetails = () => {
     if (existingList) {
       const isDuplicate = existingList.some((p) => p.id === product.id);
       if (isDuplicate) {
-        return alert("onnoda den mia eida ase");
+        return alert("Already Exists!");
       } else {
         updatedList = [...existingList, product];
       }
@@ -23,7 +23,7 @@ const ProductDetails = () => {
     }
     localStorage.setItem("wishlist", JSON.stringify(updatedList));
   };
-  
+
   return (
     <div className="card bg-base-100 border shadow-sm">
       <figure className="h-84 overflow-hidden">

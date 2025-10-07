@@ -2,12 +2,31 @@ import React, { useEffect, useState } from "react";
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
+  const [sortOrder, setSortOrder] = useState("none");
   useEffect(() => {
     const savedList = JSON.parse(localStorage.getItem("wishlist"));
     if (savedList) {
       setWishlist(savedList);
     }
   }, []);
+
+  const sortedItem = () => {
+    if (sortOrder === "price-asc") {
+      return [...wishlist.sort((a, b) => a.price - b.price)];
+    } else if (sortOrder === "price-dsc") {
+      return [...wishlist.sort((a, b) => b.price - a.price)];
+    } else {
+      return wishlist;
+    }
+  };
+
+  const handleRemove = (id) => {
+    const existingList = JSON.parse(localStorage.getItem("wishlist"));
+
+    let updatedList = existingList.filter((p) => p.id !== id);
+    setWishlist(updatedList);
+    localStorage.setItem("wishlist", JSON.stringify(updatedList));
+  };
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -17,10 +36,23 @@ const Wishlist = () => {
             ({wishlist.length}) products found
           </span>
         </h1>
-        <button className="btn">Sort</button>
+
+        <label className="form-control w-full max-w-xs">
+          <select
+            className="select"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="none" selected>
+              Sort by Price
+            </option>
+            <option value="price-asc">Low to High</option>
+            <option value="price-dsc">High to Low</option>
+          </select>
+        </label>
       </div>
       <div className="space-y-3">
-        {wishlist.map((p) => (
+        {sortedItem().map((p) => (
           <div key={p.id} className="card card-side bg-base-100 shadow border">
             <figure>
               <img
@@ -36,7 +68,7 @@ const Wishlist = () => {
             <div className="pr-4 flex items-center gap-3">
               <div className="font-semibold">${p.price}</div>
               <button
-                // onClick={() => handleRemove(p.id)}
+                onClick={() => handleRemove(p.id)}
                 className="btn btn-outline"
               >
                 Remove
